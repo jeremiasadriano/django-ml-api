@@ -6,6 +6,8 @@ import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score as accuracy
+from django.conf import settings
+import os 
 
 
 def register(request):
@@ -46,8 +48,12 @@ def chat(request):
         context = {'person': person}
         return response(template.render(context,request))
     
-    train = pd.read_csv('/home/godalway/Programs/Python/Emotions-CRUD/Emotions/Person/inputs/train.txt',names=["Emotion","Feeling"],sep=';')
-    test = pd.read_csv('/home/godalway/Programs/Python/Emotions-CRUD/Emotions/Person/inputs/test.txt',names=["Emotion","Feeling"],sep=';')
+
+    train_file_path = os.path.join(settings.BASE_DIR, 'static/datasets/train.txt')
+    test_file_path = os.path.join(settings.BASE_DIR, 'static/datasets/test.txt')
+
+    train = pd.read_csv(train_file_path,names=["Emotion","Feeling"],sep=';')
+    test = pd.read_csv(test_file_path,names=["Emotion","Feeling"],sep=';')
 
     trainInput =train.drop('Feeling', axis=1)['Emotion']
     y_train = train['Feeling']
