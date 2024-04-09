@@ -6,6 +6,7 @@ import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import SGDClassifier
 from django.conf import settings
+from django.contrib.auth import logout
 import os 
 
 
@@ -38,8 +39,8 @@ def login(request):
     
 
 def chat(request):
+    personEmail = request.session.get('person_email')
     if request.method == 'GET':
-        personEmail = request.session.get('person_email')
         if personEmail is None:
             return redirect("/login/") 
         person = Person.objects.get(email=personEmail)
@@ -49,10 +50,10 @@ def chat(request):
 
     message = request.POST['question']
     template = loader.get_template('chat.html')
-    return response(template.render(predict(message),request))
+    return response(template.render(predict(message,personEmail),request))
 
 
-def predict(message):
+def predict(message,email):
     train_file_path = os.path.join(settings.BASE_DIR, 'static/datasets/train.txt')
     train = pd.read_csv(train_file_path,names=["Emotion","Feeling"],sep=';')
 
@@ -66,7 +67,13 @@ def predict(message):
     classifier.fit(x_train, y_train)
     predictions = classifier.predict(converter.transform([message]))
 
-    answer = Message(phrase=message, answer=predictions[0])
+    person = Person.objects.get(email=email)
+    answer = Message(phrase=message, answer=predictions[0],person=person)
     answer.save()
-    messages = Message.objects.all().values()
+    messages = Message.objects.filter(person=person)
     return {'predict' : messages}
+
+
+def logout_view(request):
+    logout(request)
+    return redirect('/login/')

@@ -7,5 +7,6 @@ class Person(models.Model):
     email = models.EmailField(max_length=120, unique=True)
     password = models.CharField(max_length=18)
 class Message(models.Model):
+    person = models.ForeignKey(Person, on_delete=models.CASCADE)
     phrase = models.CharField(max_length=255)
     answer = models.CharField(max_length=255)

@@ -15,7 +15,6 @@
         <div class="question">
           <small>{{person.firstName}}</small>
           <p>Olá, eu</p>
-          <small>11:56</small>
         </div>
         {% endif %}
         <!---->
@@ -23,20 +22,23 @@
         <div class="question">
           <strong><small>You</small></strong>
           <p>{{message.phrase}}</p>
-          <small>11:56</small>
         </div>
 
         <div class="answer">
           <strong><small>System</small></strong>
           <p>{{message.answer}}</p>
-          <small>11:56</small>
         </div>
         {% endfor %}
       </div>
       <div class="ask">
-        <form action="" method="post">
-          <input type="text" name="question" placeholder="Tell me how do you feeling" />
-        </form>
+        <div class="input">
+          <form action="" method="post">
+            <input type="text" name="question" placeholder="Tell me how do you feeling" />
+          </form>
+        </div>
+        <div class="logout">
+          <a href="{% url 'logout'%}" style="float: right; text-decoration: none; color: black; font-size: 16px">Logout</a>
+        </div>
       </div>
     </main>
   </body>
