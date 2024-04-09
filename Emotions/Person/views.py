@@ -1,11 +1,10 @@
 from django.template import loader
 from django.http import HttpResponse as response
 from Person.models import Person 
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect
 import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import accuracy_score as accuracy
+from sklearn.linear_model import SGDClassifier
 from django.conf import settings
 import os 
 
@@ -47,27 +46,23 @@ def chat(request):
         template = loader.get_template('chat.html')
         context = {'person': person}
         return response(template.render(context,request))
-    
 
+    message = request.POST['question']
+    template = loader.get_template('chat.html')
+    return response(template.render(predict(message),request))
+
+
+def predict(message):
     train_file_path = os.path.join(settings.BASE_DIR, 'static/datasets/train.txt')
-    test_file_path = os.path.join(settings.BASE_DIR, 'static/datasets/test.txt')
-
     train = pd.read_csv(train_file_path,names=["Emotion","Feeling"],sep=';')
-    test = pd.read_csv(test_file_path,names=["Emotion","Feeling"],sep=';')
 
     trainInput =train.drop('Feeling', axis=1)['Emotion']
     y_train = train['Feeling']
 
-    testInput = test.drop('Feeling', axis=1)['Emotion']
-    y_test = test['Feeling']
-
     converter = TfidfVectorizer()
     x_train = converter.fit_transform(trainInput)
-    x_test = converter.transform(testInput)
 
-    classifier = RandomForestClassifier()
+    classifier = SGDClassifier()
     classifier.fit(x_train, y_train)
-
-    predictions = classifier.predict(x_test)
-
-    print(f'The accuracy is {accuracy(y_test,predictions)*100}')
+    predictions = classifier.predict(converter.transform([message]))
+    return {'predict' : predictions}
