@@ -9,7 +9,6 @@ from django.conf import settings
 from django.contrib.auth import logout
 import os 
 
-
 def register(request):
     if request.method == 'GET':
         return response(loader.get_template('signUp.html').render())
@@ -36,7 +35,6 @@ def login(request):
             return redirect("/login/")
     except Person.DoesNotExist:
         return redirect("/register/")
-    
 
 def chat(request):
     personEmail = request.session.get('person_email')
@@ -51,7 +49,6 @@ def chat(request):
     message = request.POST['question']
     template = loader.get_template('chat.html')
     return response(template.render(predict(message,personEmail),request))
-
 
 def predict(message,email):
     train_file_path = os.path.join(settings.BASE_DIR, 'static/datasets/train.txt')
@@ -72,7 +69,6 @@ def predict(message,email):
     answer.save()
     messages = Message.objects.filter(person=person)
     return {'predict' : messages}
-
 
 def logout_view(request):
     logout(request)
