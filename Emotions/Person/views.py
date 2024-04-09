@@ -39,6 +39,8 @@ def login(request):
 def chat(request):
     if request.method == 'GET':
         personEmail = request.session.get('person_email')
+        if personEmail is None:
+            return redirect("/login/") 
         person = Person.objects.get(email=personEmail)
         template = loader.get_template('chat.html')
         context = {'person': person}
