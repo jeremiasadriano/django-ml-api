@@ -28,6 +28,18 @@ body {
     max-width: 60rem;
     scrollbar-width: none;
     gap: 1.4rem;
+
+    :where(.question, .answer) {
+      border-radius: 1rem;
+      width: 60rem;
+      padding: 1rem;
+    }
+    .question {
+      background-color: rgba(128, 128, 128, 0.342);
+    }
+    .answer {
+      background-color: rgba(182, 238, 149, 0.808);
+    }
   }
 
   .ask {

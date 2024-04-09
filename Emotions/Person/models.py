@@ -6,3 +6,6 @@ class Person(models.Model):
     lastName = models.CharField(max_length=255)
     email = models.EmailField(max_length=120, unique=True)
     password = models.CharField(max_length=18)
+class Message(models.Model):
+    phrase = models.CharField(max_length=255)
+    answer = models.CharField(max_length=255)

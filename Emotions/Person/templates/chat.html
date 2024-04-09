@@ -9,24 +9,33 @@
   </head>
   <body>
     <main class="main">
+      {{person.firstName}}
       <div class="content">
+        {% if predict is None %}
         <div class="question">
           <small>{{person.firstName}}</small>
-          <p>{{predict}}</p>
+          <p>Olá, eu</p>
+          <small>11:56</small>
+        </div>
+        {% endif %}
+        <!---->
+        {% for message in predict %}
+        <div class="question">
+          <strong><small>You</small></strong>
+          <p>{{message.phrase}}</p>
           <small>11:56</small>
         </div>
 
         <div class="answer">
-          <small>System</small>
-          {% comment %}
-          <p>{{accuracy}}</p>
-          {% endcomment %}
+          <strong><small>System</small></strong>
+          <p>{{message.answer}}</p>
           <small>11:56</small>
         </div>
+        {% endfor %}
       </div>
       <div class="ask">
         <form action="" method="post">
-          <input type="text" name="question" placeholder="Do your question" />
+          <input type="text" name="question" placeholder="Tell me how do you feeling" />
         </form>
       </div>
     </main>

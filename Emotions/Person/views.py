@@ -1,6 +1,6 @@
 from django.template import loader
 from django.http import HttpResponse as response
-from Person.models import Person 
+from Person.models import Person, Message
 from django.shortcuts import redirect
 import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -32,7 +32,7 @@ def login(request):
             request.session['person_email'] = person.email
             return redirect('/chat/')
         else:
-            return redirect("/register/")
+            return redirect("/login/")
     except Person.DoesNotExist:
         return redirect("/register/")
     
@@ -65,4 +65,8 @@ def predict(message):
     classifier = SGDClassifier()
     classifier.fit(x_train, y_train)
     predictions = classifier.predict(converter.transform([message]))
-    return {'predict' : predictions}
+
+    answer = Message(phrase=message, answer=predictions[0])
+    answer.save()
+    messages = Message.objects.all().values()
+    return {'predict' : messages}
