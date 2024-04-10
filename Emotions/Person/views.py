@@ -43,7 +43,8 @@ def chat(request):
             return redirect("/login/") 
         person = Person.objects.get(email=personEmail)
         template = loader.get_template('chat.html')
-        context = {'person': person}
+        messages = Message.objects.filter(person=person)
+        context = {'person': person, 'message': messages }
         return response(template.render(context,request))
 
     message = request.POST['question']

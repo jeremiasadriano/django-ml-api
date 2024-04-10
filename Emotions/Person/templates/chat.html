@@ -11,12 +11,17 @@
     <main class="main">
       {{person.firstName}}
       <div class="content">
-        {% if predict is None %}
+        {% for msg in message %}
         <div class="question">
           <small>{{person.firstName}}</small>
-          <p>Olá, eu</p>
+          <p>{{msg.phrase}}</p>
         </div>
-        {% endif %}
+
+        <div class="answer">
+          <strong><small>System</small></strong>
+          <p>{{msg.answer}}</p>
+        </div>
+        {% endfor %}
         <!---->
         {% for message in predict %}
         <div class="question">
