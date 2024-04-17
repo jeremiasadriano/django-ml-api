@@ -36,6 +36,31 @@ def login(request):
     except Person.DoesNotExist:
         return redirect("/register/")
 
+def update(request):
+    personEmail = request.session.get('person_email')
+    person = Person.objects.get(email=personEmail)
+    firstName = request.POST['firstName']
+    lastName = request.POST['lastName']
+    email = request.POST['email']
+    password = request.POST['password']
+    person.firstName = firstName
+    person.lastName = lastName
+    person.email = email
+    person.password = password
+
+    request.session.pop('person_email')
+    request.session['person_email'] = person.email
+    person.save();
+
+    return redirect('/chat/') 
+
+def delete(request):
+    personEmail = request.session.get('person_email')
+    person = Person.objects.get(email=personEmail)
+    person.delete()
+    request.session.pop('person_email')
+    return redirect("/login/") 
+
 def chat(request):
     personEmail = request.session.get('person_email')
     if request.method == 'GET':
