@@ -12,54 +12,58 @@
   </head>
   <body>
     <main>
-      <div id="content" class="container d-flex flex-column gap-4">
-        <p class="text-center">{{person.firstName}}</p>
-        <div class="container d-flex flex-column gap-4" style="max-height: 50rem; overflow-y: auto; scrollbar-width: none">
-          {% for msg in message %}
-          <div class="card">
-            <div class="card-body">
-              <small>{{person.firstName}}</small>
-              <p>{{msg.phrase}}</p>
+      <div id="content">
+        <header class="d-flex gap-2 justify-content-center align-items-center">
+          <p class="text-center">The accuracy score was: <strong>{{accuracy}}</strong></p>
+        </header>
+        <div class="container d-flex flex-column gap-4">
+          <div class="container d-flex flex-column gap-4" style="max-height: 50rem; overflow-y: auto; scrollbar-width: none">
+            {% for msg in message %}
+            <div class="card">
+              <div class="card-body">
+                <small>{{person.firstName}}</small>
+                <p>{{msg.phrase}}</p>
+              </div>
             </div>
-          </div>
 
-          <div class="card">
-            <div class="card-body">
-              <strong><small>System</small></strong>
-              <p>{{msg.answer}}</p>
+            <div class="card">
+              <div class="card-body">
+                <strong><small>System</small></strong>
+                <p>{{msg.answer}}</p>
+              </div>
             </div>
-          </div>
-          {% endfor %}
-          <!---->
-          {% for message in predict %}
-          <div class="card">
-            <div class="card-body">
-              <small>{{person.firstName}}</small>
-              <p>{{message.phrase}}</p>
+            {% endfor %}
+            <!---->
+            {% for message in predict %}
+            <div class="card">
+              <div class="card-body">
+                <small>{{person.firstName}}</small>
+                <p>{{message.phrase}}</p>
+              </div>
             </div>
-          </div>
 
-          <div class="card">
-            <div class="card-body">
-              <strong><small>System</small></strong>
-              <p>{{message.answer}}</p>
+            <div class="card">
+              <div class="card-body">
+                <strong><small>System</small></strong>
+                <p>{{message.answer}}</p>
+              </div>
             </div>
+            {% endfor %}
           </div>
-          {% endfor %}
         </div>
-      </div>
-      <div class="container d-flex flex-row gap-2 alignItems-center justifyContent-center mt-3 w-75">
-        <button type="button" class="border border-0" data-bs-toggle="modal" data-bs-target="#updateModal">
-          <img src="{% static "images/user.png" %}" style="width:30px; height:30px">
-        </button>
-        <div class="w-100">
-          <form>
-            <input type="text" name="question" placeholder="Tell me how do you feeling" class="form-control p-3" />
-            <button style="display: none" hx-post="" hx-target="#content">Submite</button>
-          </form>
-        </div>
-        <div class="logout">
-          <a href="{% url 'logout'%}" style="float: right; text-decoration: none; color: black; font-size: 16px">Logout</a>
+        <div class="container d-flex flex-row gap-2 alignItems-center justifyContent-center mt-3 w-75">
+          <button type="button" class="border border-0" data-bs-toggle="modal" data-bs-target="#updateModal">
+            <img src="{% static "images/user.png" %}" style="width:30px; height:30px">
+          </button>
+          <div class="w-100">
+            <form>
+              <input type="text" name="question" placeholder="Tell me how do you feeling" class="form-control p-3" />
+              <button style="display: none" hx-post="" hx-target="#content">Submite</button>
+            </form>
+          </div>
+          <div class="logout">
+            <a href="{% url 'logout'%}" style="float: right; text-decoration: none; color: black; font-size: 16px">Logout</a>
+          </div>
         </div>
       </div>
 
