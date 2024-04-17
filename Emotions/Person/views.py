@@ -88,7 +88,7 @@ def predict(message,email):
     y_train = train['Feeling']
 
     testInput = test.drop('Feeling', axis=1)['Emotion']
-    y_test = test.Feeling
+    y_test = test['Feeling']
 
     converter = TfidfVectorizer()
     x_train = converter.fit_transform(trainInput)
