@@ -8,7 +8,7 @@
 <ul>
 <li><code>python3 -m venv .venv</code></li>
 <li><code>source .venv/bin/activate</code></li>
-<li><code>pip install django pandas scikit-learn</code></li>
+<li><code>pip install django pandas scikit-learn psycopg_binary psycopg</code></li>
 </ul>
 <p>Now you've created your django enviroment, so now you need to configure your database. As you can see, on this project you can found a docker-compose file and you just need to run it:</p>
 
