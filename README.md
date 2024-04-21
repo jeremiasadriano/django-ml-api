@@ -3,7 +3,7 @@
 <h4>The model was trained based on a online dataset downloaded on kaggle</h4>
 
 <h4>How to run</h4>
-<p>First you'll need create a new enviroment, to do that you just have to:</p>
+<p>First you'll need to create a new enviroment, to do that just type:</p>
 
 <ul>
 <li><code>python3 -m venv .venv</code></li>
