@@ -8,6 +8,7 @@ from sklearn.linear_model import SGDClassifier
 from sklearn.metrics import accuracy_score
 from django.conf import settings
 from django.contrib.auth import logout
+from django.db import IntegrityError
 import os 
 
 def register(request):
@@ -18,8 +19,13 @@ def register(request):
     email = request.POST['email']
     password = request.POST['password']
     person = Person(firstName = firstName,lastName= lastName,email = email,password = password)
-    person.save();
-    return redirect("/login/")  
+    try:
+        person.save();
+        request.session['person_email'] = person.email
+        return redirect('/chat/')
+    except IntegrityError:
+        context = {'messageError': "User with such email already exists!"}
+        return response(loader.get_template('signUp.html').render(context,request))
 
 def login(request):
     if request.method == 'GET':
