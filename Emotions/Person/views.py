@@ -33,9 +33,11 @@ def login(request):
             request.session['person_email'] = person.email
             return redirect('/chat/')
         else:
-            return redirect("/login/")
+            context = {'messageError': "No user with such email or password was found!"}
+            return response(loader.get_template('login.html').render(context,request))
     except Person.DoesNotExist:
-        return redirect("/register/")
+        context = {'messageError': "No user with such email or password was found!"}
+        return response(loader.get_template('login.html').render(context,request))
 
 def update(request):
     personEmail = request.session.get('person_email')
