@@ -1,15 +1,10 @@
 from django.template import loader
 from django.http import HttpResponse as response
 from Person.models import Person, Message
+from Person.ml_model import predict
 from django.shortcuts import redirect
-import pandas as pd
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.linear_model import SGDClassifier
-from sklearn.metrics import accuracy_score
-from django.conf import settings
 from django.contrib.auth import logout
 from django.db import IntegrityError
-import os 
 
 def register(request):
     if request.method == 'GET':
@@ -84,36 +79,6 @@ def chat(request):
     message = request.POST['question']
     template = loader.get_template('chat.html')
     return response(template.render(predict(message,personEmail),request))
-
-def predict(message,email):
-    train_file_path = os.path.join(settings.BASE_DIR, 'static/datasets/train.txt')
-    test_file_path = os.path.join(settings.BASE_DIR, 'static/datasets/test.txt')
-
-    train = pd.read_csv(train_file_path,names=["Emotion","Feeling"],sep=';')
-    test = pd.read_csv(test_file_path,names=["Emotion","Feeling"],sep=';')
-
-    trainInput =train.drop('Feeling', axis=1)['Emotion']
-    y_train = train['Feeling']
-
-    testInput = test.drop('Feeling', axis=1)['Emotion']
-    y_test = test['Feeling']
-
-    converter = TfidfVectorizer()
-    x_train = converter.fit_transform(trainInput)
-    x_test = converter.transform(testInput)
-
-    classifier = SGDClassifier()
-    classifier.fit(x_train, y_train)
-    prediction = classifier.predict(x_test)
-
-    accuray = (accuracy_score(y_test,prediction)*100)
-
-    predictionsResult = classifier.predict(converter.transform([message]))
-    person = Person.objects.get(email=email)
-    answer = Message(phrase=message, answer=predictionsResult[0],person=person)
-    answer.save()
-    messages = Message.objects.filter(person=person)
-    return {'predict' : messages, 'accuracy': accuray, 'person': person}
 
 def logout_view(request):
     logout(request)
