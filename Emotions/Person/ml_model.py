@@ -28,7 +28,7 @@ def predict(message,email):
     prediction = classifier.predict(x_test)
 
     accuray = (accuracy_score(y_test,prediction)*100)
-
+    
     predictionsResult = classifier.predict(converter.transform([message]))
     person = Person.objects.get(email=email)
     answer = Message(phrase=message, answer=predictionsResult[0],person=person)
